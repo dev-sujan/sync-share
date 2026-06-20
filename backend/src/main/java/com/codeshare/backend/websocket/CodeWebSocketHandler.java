@@ -60,6 +60,9 @@ public class CodeWebSocketHandler extends TextWebSocketHandler {
             case "CHAT":
                 handleChat(session, roomId, sender, (String) data);
                 break;
+            case "FILE_UPLOADED":
+                broadcastToRoomExceptSender(session, roomId, message);
+                break;
             default:
                 break;
         }
