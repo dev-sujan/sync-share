@@ -245,11 +245,15 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.app-container.in-workspace {
+  height: 100vh;
+  overflow: hidden;
+}
+
 /* Workspace Layout */
 .workspace {
   display: flex;
   flex: 1;
-  height: calc(100vh - 65px);
   overflow: hidden;
 }
 
@@ -582,6 +586,135 @@ body {
   gap: 0.75rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   animation: slideIn 0.3s ease forwards;
+}
+
+/* Mobile Bottom Tab Bar (hidden by default on desktop) */
+.mobile-tab-bar {
+  display: none;
+}
+
+/* Mobile responsiveness and adaptive layouts */
+@media (max-width: 768px) {
+  /* Hide mobile-hidden elements */
+  .mobile-hidden {
+    display: none !important;
+  }
+
+  /* Navbar padding & scaling */
+  .navbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-actions {
+    gap: 0.5rem;
+  }
+
+  /* Header badges and action text hiding */
+  .username-badge {
+    margin-right: 0.5rem !important;
+  }
+
+  .badge-text, .btn-text {
+    display: none !important;
+  }
+
+  .btn-sm {
+    padding: 0.5rem !important; /* Square-like button for icon only */
+  }
+
+  /* Workspace stacked layout */
+  .workspace {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100% !important;
+    border-right: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Editor Control Bar scaling */
+  .editor-control-bar {
+    padding: 0.5rem 1rem;
+  }
+
+  .editor-title h2 {
+    font-size: 0.9rem;
+  }
+
+  .select-control {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  /* Welcome & Password card scaling */
+  .welcome-card, .password-card {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .welcome-card h1 {
+    font-size: 1.6rem;
+  }
+
+  /* Mobile Bottom Tab Navigation */
+  .mobile-tab-bar {
+    display: flex;
+    height: 60px;
+    background: rgba(8, 7, 16, 0.95);
+    backdrop-filter: var(--glass-blur);
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  .mobile-tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-tab-btn.active {
+    color: var(--accent-primary);
+  }
+
+  .mobile-tab-btn svg {
+    transition: transform 0.2s ease;
+  }
+
+  .mobile-tab-btn.active svg {
+    transform: translateY(-2px);
+    color: var(--accent-primary);
+    filter: drop-shadow(0 0 6px var(--accent-glow));
+  }
+}
+
+@media (max-width: 480px) {
+  /* Smaller screens */
+  .navbar {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .logo span {
+    font-size: 1.1rem;
+  }
+
+  .logo svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @keyframes slideIn {

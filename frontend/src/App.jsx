@@ -40,6 +40,7 @@ function App() {
   const [wsStatus, setWsStatus] = useState('disconnected'); // 'connected', 'disconnected', 'connecting'
   const [sharedFiles, setSharedFiles] = useState([]);
   const [sidebarTab, setSidebarTab] = useState('files'); // 'files', 'chat'
+  const [mobileView, setMobileView] = useState('editor'); // 'editor', 'files', 'chat'
   
   // Chat
   const [chatMessages, setChatMessages] = useState([]);
@@ -366,7 +367,7 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className={`app-container ${view === 'workspace' ? 'in-workspace' : ''}`}>
       {/* Header */}
       <header className="navbar">
         <div className="logo" onClick={handleLeaveRoom} style={{cursor: 'pointer'}}>
@@ -375,20 +376,20 @@ function App() {
         </div>
         {view === 'workspace' && roomInfo && (
           <div className="nav-actions">
-            <span className="status-badge" style={{marginRight: '1rem'}}>
-              👤 {username}
+            <span className="status-badge username-badge" style={{marginRight: '1rem'}}>
+              👤 <span className="badge-text">{username}</span>
             </span>
             <div className={`status-badge ${wsStatus === 'connected' ? 'status-connected' : wsStatus === 'connecting' ? 'status-connecting' : 'status-disconnected'}`}>
               <span className="status-dot"></span>
-              {wsStatus === 'connected' ? 'Live Sync' : wsStatus === 'connecting' ? 'Connecting...' : 'Disconnected'}
+              <span className="badge-text">{wsStatus === 'connected' ? 'Live Sync' : wsStatus === 'connecting' ? 'Connecting...' : 'Disconnected'}</span>
             </div>
-            <button className="btn btn-secondary btn-sm" onClick={handleCopyLink}>
+            <button className="btn btn-secondary btn-sm" onClick={handleCopyLink} title="Share Link">
               {copied ? <Check size={16} /> : <Copy size={16} />}
-              Share Link
+              <span className="btn-text">Share Link</span>
             </button>
-            <button className="btn btn-secondary btn-sm" onClick={handleLeaveRoom} style={{color: '#e74c3c'}}>
+            <button className="btn btn-secondary btn-sm" onClick={handleLeaveRoom} style={{color: '#e74c3c'}} title="Leave Room">
               <LogOut size={16} />
-              Leave Room
+              <span className="btn-text">Leave Room</span>
             </button>
           </div>
         )}
@@ -475,18 +476,24 @@ function App() {
       {view === 'workspace' && roomInfo && (
         <div className="workspace">
           {/* Sidebar */}
-          <aside className="sidebar">
+          <aside className={`sidebar ${mobileView === 'editor' ? 'mobile-hidden' : ''}`}>
             <div className="sidebar-tabs">
               <button 
                 className={`sidebar-tab ${sidebarTab === 'files' ? 'active' : ''}`}
-                onClick={() => setSidebarTab('files')}
+                onClick={() => {
+                  setSidebarTab('files');
+                  setMobileView('files');
+                }}
               >
                 <FileCode size={16} />
                 Files ({sharedFiles.length})
               </button>
               <button 
                 className={`sidebar-tab ${sidebarTab === 'chat' ? 'active' : ''}`}
-                onClick={() => setSidebarTab('chat')}
+                onClick={() => {
+                  setSidebarTab('chat');
+                  setMobileView('chat');
+                }}
               >
                 <MessageSquare size={16} />
                 Chat
@@ -574,7 +581,7 @@ function App() {
           </aside>
 
           {/* Editor Workspace */}
-          <main className="editor-area">
+          <main className={`editor-area ${mobileView !== 'editor' ? 'mobile-hidden' : ''}`}>
             <div className="editor-control-bar">
               <div className="editor-title">
                 <h2>{roomInfo.name}</h2>
@@ -621,6 +628,37 @@ function App() {
               />
             </div>
           </main>
+
+          {/* Mobile Bottom Tab Bar */}
+          <div className="mobile-tab-bar">
+            <button 
+              className={`mobile-tab-btn ${mobileView === 'editor' ? 'active' : ''}`}
+              onClick={() => setMobileView('editor')}
+            >
+              <Code2 size={20} />
+              <span>Editor</span>
+            </button>
+            <button 
+              className={`mobile-tab-btn ${mobileView === 'files' ? 'active' : ''}`}
+              onClick={() => {
+                setMobileView('files');
+                setSidebarTab('files');
+              }}
+            >
+              <FileCode size={20} />
+              <span>Files</span>
+            </button>
+            <button 
+              className={`mobile-tab-btn ${mobileView === 'chat' ? 'active' : ''}`}
+              onClick={() => {
+                setMobileView('chat');
+                setSidebarTab('chat');
+              }}
+            >
+              <MessageSquare size={20} />
+              <span>Chat</span>
+            </button>
+          </div>
         </div>
       )}
 
