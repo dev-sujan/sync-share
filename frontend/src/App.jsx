@@ -226,6 +226,9 @@ function App() {
               self: false
             }]);
             break;
+          case 'FILE_UPLOADED':
+            fetchFiles(roomId);
+            break;
           default:
             break;
         }
@@ -325,6 +328,14 @@ function App() {
       if (res.ok) {
         showToast('success', 'File uploaded successfully!');
         fetchFiles(roomId);
+        // Notify other users in the room via WebSocket
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+          wsRef.current.send(JSON.stringify({
+            type: 'FILE_UPLOADED',
+            roomId: roomId,
+            sender: username
+          }));
+        }
       } else {
         showToast('error', 'File upload failed.');
       }
