@@ -1,0 +1,8 @@
+# Realtime CodeShare - SyncShare
+
+## Uploads directory (runtime generated)
+backend/uploads/
+
+## OS files
+.DS_Store
+Thumbs.db
