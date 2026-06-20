@@ -57,6 +57,9 @@ public class CodeWebSocketHandler extends TextWebSocketHandler {
             case "CURSOR_CHANGE":
                 broadcastToRoomExceptSender(session, roomId, message);
                 break;
+            case "CHAT":
+                handleChat(session, roomId, sender, (String) data);
+                break;
             default:
                 break;
         }
@@ -114,6 +117,16 @@ public class CodeWebSocketHandler extends TextWebSocketHandler {
         broadcastMsg.put("roomId", roomId);
         broadcastMsg.put("sender", senderSession.getId());
         broadcastMsg.put("data", language);
+
+        broadcast(roomId, senderSession, broadcastMsg);
+    }
+
+    private void handleChat(WebSocketSession senderSession, String roomId, String sender, String text) {
+        Map<String, Object> broadcastMsg = new HashMap<>();
+        broadcastMsg.put("type", "CHAT");
+        broadcastMsg.put("roomId", roomId);
+        broadcastMsg.put("sender", sender);
+        broadcastMsg.put("data", text);
 
         broadcast(roomId, senderSession, broadcastMsg);
     }
